@@ -1,0 +1,21 @@
+{# Import a static tag from django.contrib.staticfiles, specified in INSTALLED_APPS. #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {# All about temlates: https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ #}
+    <title>{% block title %}{% endblock %}</title>
+    {# Add a static file #}
+    <link href="{% static "css/blog.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="sidebar">
+        <h2>Blog App</h2>
+        <p>This is my next django app.</p>
+    </div>
+</body>
+</html>
