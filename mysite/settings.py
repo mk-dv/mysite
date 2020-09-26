@@ -120,3 +120,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Email
+
+# SMTP-host, localhost by default
+EMAIL_HOST = 'smtp.gmail.com'
+
+# SMTP-post, 25 by default
+EMAIL_PORT = 587
+
+# Login for access to SMTP-server
+EMAIL_HOST_USER = 'django.framework.email.test@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'yuDDBKqXh7TmXRY'
+
+EMAIL_USE_TLS = True
+
+# DEBUG: Write email to console without connect to SMTP-server
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

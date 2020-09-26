@@ -16,4 +16,5 @@ urlpatterns = [
     # Details: https://docs.djangoproject.com/en/2.0/topics/http/urls/#path-converters
     # Alternate: re_path(), details: https://docs.django-project.com/en/2.0/ref/urls/#django.urls.re_path
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail'),
+    path('<int:post_id>/share/', views.post_share, name='post_share'),
 ]
