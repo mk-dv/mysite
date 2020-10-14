@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import send_mail
 
 from .models import Post
 from .forms import EmailPostForm
@@ -23,6 +24,15 @@ def post_list(request, posts_on_page=3):
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, slug=post, status='published', publish__year=year,
                              publish__month=month, publish__day=day)
+    comments = post.comments.filter(active=True)
+    new_comments = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # Create comment
+            new_comment = comment_form.save(commit=False)
+            # Link comment to current post
+            new_comment.post =
     return render(request, 'blog/post/detail.html', {'post': post})
 
 
@@ -38,16 +48,16 @@ def post_share(request, post_id):
         # List of validatior errors contain in forms.errors
         if form.is_valid():
             # Contain only valid fields
-            cd = form.cleared_data
+            cd = form.cleaned_data
 
             # Sending email
             # .get_absolute_url returns the path relative from the application
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f'''{cd['name']} ({cd['email']}) recommends you reading {post.title}'''
-            message = f'''Read "{post.title}" at {post.url}\n\n{cd['name']}'s comments:{cd['comments']}'''
+            message = f'''Read "{post.title}" at {post_url}\n\n{cd['name']}'s comments:{cd['comments']}'''
             from_email = 'django.framework.email.test@gmail.com'
             send_mail(subject, message, from_email, [cd['to']])
             sent = True
     else:
         form = EmailPostForm()
-        return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
+    return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})

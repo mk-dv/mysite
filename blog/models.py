@@ -38,3 +38,21 @@ class Post(models.Model):
     class Meta:
         ordering = ('-publish', )
 
+
+class Comment(models.Model):
+    # related_name allows access to article comments (post.comments.all())
+    # , in addition to accessing the article from a comment (comment.post).
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    # Implements comment hiding
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'Comment by {self.name} on {self.post}'
