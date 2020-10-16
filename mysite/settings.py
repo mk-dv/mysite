@@ -18,18 +18,24 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
+
+# TODO(mk-dv): Check comment for grammar.
+# TODO(mk-dv): Generate new SECRET_KEY and move him to venv.
 SECRET_KEY = 'ag%1x6mk$$rkzzu22*4vp^+z8btsyd3%p#9ub)r-)ikqndmd$q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+# TODO(mk-dv): Turn-off DEBUG-mode.
 DEBUG = True
 
+# TODO(mk-dv): Add ALLOWED_HOSTS
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
+# TODO(mk-dv): remove 'django_extensions'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

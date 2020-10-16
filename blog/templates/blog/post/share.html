@@ -8,8 +8,10 @@
         <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}</p>
     {% else %}
         <h1>Share "{{ post.title }}" by e-mail</h1>
+        {# TODO(mk-dv): check comment for grammar #}
         {# action="." set form url to current #}
         <form action="." method="post">
+            {# TODO(mk-dv): check comment for grammar #}
             {# Add form object with fields in <p> tags #}
             {{ form.as_p }}
             {% csrf_token %}

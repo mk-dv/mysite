@@ -9,6 +9,7 @@
             <p class="date">Published {{ post.publish }} by {{ post.author }}</p>
             {{ post.body|truncatewords:30|linebreaks }}
         {% endfor %}
+    {# TODO(mk-dv): Check comment for grammar. #}
     {# Since in the current template the page is passed in the posts parameter. #}
     {% include "pagination.html" with page=posts %}
 {% endblock %}

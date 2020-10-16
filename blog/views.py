@@ -1,11 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, get_object_or_404
 
+from .forms import EmailPostForm, CommentForm
 from .models import Post
-from .forms import EmailPostForm
 
 
+# TODO(mk-dv): Check comments in this file for grammar.
+# TODO(mk-dv): Add a docstring
 def post_list(request, posts_on_page=3):
     # posts = Post.published.all()
     published_posts = Post.published.all()
@@ -16,30 +18,41 @@ def post_list(request, posts_on_page=3):
     except PageNotAnInteger:
         posts = paginator.page(1)
     except EmptyPage:
-        # If the page number passed in the request is greater than the number of existing page numbers.
+        # If the page number passed in the request is greater than the number
+        # of existing page numbers.
         posts = paginator.page(paginator.num_pages)
-    return render(request, 'blog/post/list.html', {'page': page, 'posts': posts})
+    return render(request, 'blog/post/list.html',
+                  {'page': page, 'posts': posts})
 
 
+# TODO(mk-dv): Add a docstring
 def post_detail(request, year, month, day, post):
-    post = get_object_or_404(Post, slug=post, status='published', publish__year=year,
-                             publish__month=month, publish__day=day)
+    post = get_object_or_404(Post, slug=post, status='published',
+                             publish__year=year, publish__month=month,
+                             publish__day=day)
     comments = post.comments.filter(active=True)
-    new_comments = None
+    new_comment = None
+    comment_form = None
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             # Create comment
             new_comment = comment_form.save(commit=False)
             # Link comment to current post
-            new_comment.post =
-    return render(request, 'blog/post/detail.html', {'post': post})
+            new_comment.post = post
+            new_comment.save()
+        else:
+            # if form is invalid - return form
+            comment_form = CommentForm()
+    return render(request, 'blog/post/detail.html',
+                  {'post': post, 'comments': comments,
+                   'new_comment': new_comment, 'comment_form': comment_form})
 
 
+# TODO(mk-dv): Add a docstring
 def post_share(request, post_id):
-    # Get Post by id
-    # In theory get_object_or_404 using django orm (objects.get)
-    # , they are equivalent anyway.
+    # Get Post object by id. In theory get_object_or_404 using django orm
+    # (objects.get), they are equivalent anyway.
     post = get_object_or_404(Post, id=post_id, status='published')
     sent = False
     if request.method == 'POST':
@@ -51,13 +64,16 @@ def post_share(request, post_id):
             cd = form.cleaned_data
 
             # Sending email
-            # .get_absolute_url returns the path relative from the application
+            # get_absolute_url() returns the path relative from the application.
             post_url = request.build_absolute_uri(post.get_absolute_url())
-            subject = f'''{cd['name']} ({cd['email']}) recommends you reading {post.title}'''
-            message = f'''Read "{post.title}" at {post_url}\n\n{cd['name']}'s comments:{cd['comments']}'''
+            subject = (f"{cd['name']} ({cd['email']}) recommends you reading "
+                       f"{post.title}")
+            message = (f'Read "{post.title}" at {post_url}\n\n'
+                       f"{cd['name']}'s comments:{cd['comments']}")
             from_email = 'django.framework.email.test@gmail.com'
             send_mail(subject, message, from_email, [cd['to']])
             sent = True
     else:
         form = EmailPostForm()
-    return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
+    return render(request, 'blog/post/share.html',
+                  {'post': post, 'form': form, 'sent': sent})
