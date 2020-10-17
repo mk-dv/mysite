@@ -2,15 +2,22 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 
+from taggit.models import Tag
+
 from .forms import EmailPostForm, CommentForm
 from .models import Post
 
 
 # TODO(mk-dv): Check comments in this file for grammar.
 # TODO(mk-dv): Add a docstring
-def post_list(request, posts_on_page=3):
-    # posts = Post.published.all()
+def post_list(request, posts_on_page=3, tag_slug=None):
     published_posts = Post.published.all()
+
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        published_posts = published_posts.filter(tags__in=[tag])
+
     paginator = Paginator(published_posts, posts_on_page)
     page = request.GET.get('page')
     try:
@@ -22,7 +29,7 @@ def post_list(request, posts_on_page=3):
         # of existing page numbers.
         posts = paginator.page(paginator.num_pages)
     return render(request, 'blog/post/list.html',
-                  {'page': page, 'posts': posts})
+                  {'page': page, 'posts': posts, 'tag': tag})
 
 
 # TODO(mk-dv): Add a docstring

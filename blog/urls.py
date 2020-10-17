@@ -12,6 +12,7 @@ app_name = 'blog'
 urlpatterns = [
     # Post views
     path('', views.post_list, name='post_list'),
+    path('tag/<slug:tag_slug>/', views.post_list, name='post_list_by_tag'),
     # Any values, define as a <parameter> returns as a string.
     # <[converter]:parameter> explicitly indicates that the value should be
     # retrieved as a specific types. Details:

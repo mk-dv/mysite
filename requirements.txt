@@ -3,3 +3,4 @@ Django~=2.2
 django-extensions
 jupyter
 ipython
+django_taggit~=0.22

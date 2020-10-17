@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+from taggit.managers import TaggableManager
+
 
 # TODO(mk-dv): check grammar in file comments.
 # Create a custom Model Manager
@@ -27,8 +29,10 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
                               default='draft')
-    #TODO(mk-dv): clear # objects = models.Manager()
+
+    objects = models.Manager()
     published = PublishedManager()
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title
