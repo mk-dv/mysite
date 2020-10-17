@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 
 from taggit.models import Tag
@@ -51,9 +52,19 @@ def post_detail(request, year, month, day, post):
         else:
             # if form is invalid - return form
             comment_form = CommentForm()
+    # Forming similar posts list.
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    all_posts_with_same_tags = Post.published.filter(tags__in=post_tags_ids)
+    similar_posts = all_posts_with_same_tags.exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags'))
+    # TODO(mk-dv): Remove magic number.
+    similar_posts = similar_posts.order_by('-same_tags', '-publish')[:4]
     return render(request, 'blog/post/detail.html',
-                  {'post': post, 'comments': comments,
-                   'new_comment': new_comment, 'comment_form': comment_form})
+                  {'post': post,
+                   'comments': comments,
+                   'new_comment': new_comment,
+                   'comment_form': comment_form,
+                   'similar_posts': similar_posts})
 
 
 # TODO(mk-dv): Add a docstring

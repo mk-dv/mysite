@@ -1,3 +1,5 @@
+# TODO(mk-dv): check grammar in file comments.
+# TODO(mk-dv): Add a docstring.
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -6,9 +8,10 @@ from django.utils import timezone
 from taggit.managers import TaggableManager
 
 
-# TODO(mk-dv): check grammar in file comments.
 # Create a custom Model Manager
 class PublishedManager(models.Manager):
+    """A custom Model Manager for Post"""
+
     def get_queryset(self):
         return super().get_queryset().filter(status='published')
 
@@ -38,9 +41,9 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog:post_detail', args=[self.publish.year,
-                                                 self.publish.month,
-                                                 self.publish.day, self.slug])
+        return reverse('blog:post_detail',
+                       args=[self.publish.year, self.publish.month,
+                             self.publish.day, self.slug])
 
     class Meta:
         ordering = ('-publish', )
