@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .feeds import LatestPostsFeed
 
 # TODO(mk-dv): check comments in this file for grammar.
 # Define an application namespace for grouping URLs and using their names to
@@ -22,4 +23,5 @@ urlpatterns = [
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail,
          name='post_detail'),
     path('<int:post_id>/share/', views.post_share, name='post_share'),
+    path('feed/', LatestPostsFeed(), name='post_feed'),
 ]

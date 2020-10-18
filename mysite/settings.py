@@ -32,6 +32,8 @@ DEBUG = True
 # TODO(mk-dv): Add ALLOWED_HOSTS
 ALLOWED_HOSTS = []
 
+# Site id for using in sitemap
+SITE_ID = 1
 
 # Application definition
 
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'django_extensions',
     'taggit',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

@@ -76,7 +76,7 @@ def post_share(request, post_id):
     if request.method == 'POST':
         # Pass data from request to form for validate
         form = EmailPostForm(request.POST)
-        # List of validatior errors contain in forms.errors
+        # List of validation errors contain in forms.errors
         if form.is_valid():
             # Contain only valid fields
             cd = form.cleaned_data
