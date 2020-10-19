@@ -14,7 +14,8 @@ def total_posts():
     return Post.published.count()
 
 
-# Inclusive tags must be returns only dicts for using in template context.
+# Including tags must only return a dict type for use in the context of the
+# template.
 @register.inclusion_tag('blog/post/latest_posts.html')
 def show_latest_posts(count=5):
     latest_posts = Post.published.order_by('-publish')[:count]

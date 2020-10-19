@@ -4,18 +4,30 @@ from django.template.defaultfilters import truncatewords
 
 from .models import Post
 
+
 # TODO(mk-dv): Add a docstring.
 class LatestPostsFeed(Feed):
-    # Feed - класс подсистемы фидов Django. Атрибуты будут представлены RSS
-    # элементами(XML тегами) с соответствующими именами.
+    """Feed is the Django feed subsystem class. The attributes will be
+     represented by RSS elements (XML tags) with corresponding names.
+
+    Attributes:
+        title:
+        link:
+        description:
+    """
+
     title = 'My blog'
     link = '/blog/'
     description = 'New posts of my blog.'
 
-    # TODO(mk-dv): Translate TODO
-    # TODO(mk-dv): Кажется этот менеджер не сортирует посты по дате
-    # Получает объекты включаемые в рассылку
-    def items(self):
+    # TODO(mk-dv): This method does not seem to sort posts by date.
+    @staticmethod
+    def items():
+        """Gets objects to be included in the RSS feed.
+
+        Returns:
+            A "QuerySet" with 5 published posts.
+        """
         return Post.published.all()[:5]
 
     def item_title(self, item):

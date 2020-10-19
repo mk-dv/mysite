@@ -22,6 +22,6 @@ urlpatterns = [
     # https://docs.django-project.com/en/2.0/ref/urls/#django.urls.re_path
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail,
          name='post_detail'),
-    path('<int:post_id>/share/', views.post_share, name='post_share'),
+    path('<int:post_id>/share/', views.post_share_by_email, name='post_share'),
     path('feed/', LatestPostsFeed(), name='post_feed'),
 ]

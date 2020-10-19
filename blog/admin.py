@@ -5,22 +5,26 @@ from blog.models import Post, Comment
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    # TODO: перевести эти комментарии
-    # Отображать эти поля
+    """
+
+
+    """
+    # Show these fields.
     list_display = ('title', 'slug', 'author', 'publish', 'status')
-    # Добавляет справа панель для фильтрации по указанным полям, при этом
-    # отображаются только поля включ разные значения.
+    # Adds a panel to the right for filtering by the specified fields, with only
+    # fields containing different values.
     list_filter = ('status', 'created', 'publish', 'author')
-    # Добавляет панель поиска(строка поиска добавляется для моделей с
-    # определённым attr search_fields).
+    # Adds search bar (search bar is added only for models specified in
+    # 'search_fields').
     search_fields = ('title', 'body')
-    # При добавлении записи - слаг берёт val из поля title. Поле заполняется
-    # прямо во время заполнения поля title при создании
-    # записи(с небольшой задержкой), при этом для слага используется транслит.
+    # When adding a record (in the admin panel) - the slug takes value from the
+    # title field. The field is filled in right when filling the title field
+    # when creating a post (with a delay), wherein transliteration is used for
+    # the slug.
     prepopulated_fields = {'slug': ('title',)}
-    # Заменяет lst выбора на строку поиска.
+    # Replaces a dropdown selection list with a search box.
     raw_id_fields = ('author',)
-    # Добавляет под строкой поиска ссылки навигации по дате.
+    # Adds date navigation links below the search bar.
     date_hierarchy = 'publish'
     ordering = ('status', 'publish')
 

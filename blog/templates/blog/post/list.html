@@ -25,7 +25,5 @@
             </p>
             {{ post.body|markdown|truncatewords_html:30 }}
         {% endfor %}
-    {# TODO(mk-dv): Check comment for grammar. #}
-    {# Since in the current template the page is passed in the posts parameter. #}
     {% include "pagination.html" with page=posts %}
 {% endblock %}

@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
 
-# TODO(mk-dv): Check comment for grammar.
 # TODO(mk-dv): Generate new SECRET_KEY and move him to venv.
 SECRET_KEY = 'ag%1x6mk$$rkzzu22*4vp^+z8btsyd3%p#9ub)r-)ikqndmd$q'
 
@@ -29,7 +28,7 @@ SECRET_KEY = 'ag%1x6mk$$rkzzu22*4vp^+z8btsyd3%p#9ub)r-)ikqndmd$q'
 # TODO(mk-dv): Turn-off DEBUG-mode.
 DEBUG = True
 
-# TODO(mk-dv): Add ALLOWED_HOSTS
+# TODO(mk-dv): Add ALLOWED_HOSTS.
 ALLOWED_HOSTS = []
 
 # Site id for using in sitemap
@@ -37,7 +36,7 @@ SITE_ID = 1
 
 # Application definition
 
-# TODO(mk-dv): remove 'django_extensions'
+# TODO(mk-dv): Remove 'django_extensions'.
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,6 +139,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 # SMTP-post, 25 by default
 EMAIL_PORT = 587
 
+# TODO(mk-dv): Exclude auth-data from sources.
 # Login for access to SMTP-server
 EMAIL_HOST_USER = 'django.framework.email.test@gmail.com'
 
