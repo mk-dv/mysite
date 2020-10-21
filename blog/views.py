@@ -1,7 +1,8 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.db.models import Count
+from django.db.models.functions import Greatest
 from django.shortcuts import get_object_or_404, render
 
 from taggit.models import Tag
@@ -93,11 +94,11 @@ def post_list(request, tag_slug=None, posts_on_page = 3):
 
 
 def post_search(request):
-    """
+    """Search posts by a query in title or body.
 
     Args:
-        request: An HttpRequest instance passed with the POST method.
-
+        request: An HttpRequest instance with search query passed with the POST
+         method.
     """
     form = SearchForm()
     query = None
@@ -106,17 +107,19 @@ def post_search(request):
         form = SearchForm(request.GET)
     if form.is_valid():
         query = form.cleaned_data['query']
-        # Increase the relevance of the title search.
-        search_vector = (SearchVector('title', weight='A') +
-                         SearchVector('body', weight='B'))
-        search_query = SearchQuery(query)
-        search_rank = SearchRank(search_vector, search_query)
+        # TODO(mk-dv): Check variable name for relevance.
+        THRESHOLD = 0.003
         # Annotate table strings by SearchVectors and filter by relevance. Using
         # SearchRank for comment ranking.
         results = (Post.objects
-                   .annotate(search=search_vector, rank=search_rank)
-                   .filter(rank__gte=0.3)
-                   .order_by('-rank'))
+                   .annotate(
+                        similarity=Greatest(
+                            TrigramSimilarity('title', query),
+                            TrigramSimilarity('body', query)
+                        )
+                    )
+                   .filter(similarity__gte=THRESHOLD)
+                   .order_by('-similarity'))
     return render(request, 'blog/post/search.html',
                   {'form': form, 'query': query, 'results': results})
 
