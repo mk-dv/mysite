@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.db.models import Count
@@ -92,8 +92,6 @@ def post_list(request, tag_slug=None, posts_on_page = 3):
                   {'page': page, 'posts': posts, 'tag': tag})
 
 
-# TODO(mk-dv): Check what happens if, for example, the 'request' is sent using
-#  the POST method.
 def post_search(request):
     """
 
@@ -108,10 +106,17 @@ def post_search(request):
         form = SearchForm(request.GET)
     if form.is_valid():
         query = form.cleaned_data['query']
-        # TODO(mk-dv): Try this request in the console.
+        # Increase the relevance of the title search.
+        search_vector = (SearchVector('title', weight='A') +
+                         SearchVector('body', weight='B'))
+        search_query = SearchQuery(query)
+        search_rank = SearchRank(search_vector, search_query)
+        # Annotate table strings by SearchVectors and filter by relevance. Using
+        # SearchRank for comment ranking.
         results = (Post.objects
-                   .annotate(search=SearchVector('title', 'body'))
-                   .filter(search=query))
+                   .annotate(search=search_vector, rank=search_rank)
+                   .filter(rank__gte=0.3)
+                   .order_by('-rank'))
     return render(request, 'blog/post/search.html',
                   {'form': form, 'query': query, 'results': results})
 
