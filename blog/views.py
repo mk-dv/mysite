@@ -1,59 +1,30 @@
+from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from taggit.models import Tag
 
-from .forms import EmailPostForm, CommentForm
+from .forms import CommentForm, EmailPostForm, SearchForm
 from .models import Post
 
 
-def post_list(request, posts_on_page=3, tag_slug=None):
-    """Displays the main blog page with paginated Post's.
-
-    Args:
-        request: An HttpRequest instance.
-        posts_on_page: An integer post number on one page.
-        tag_slug: Tag for Post filtering.
-
-    Returns:
-         A HttpResponse.
-    """
-    published_posts = Post.published.all()
-
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        published_posts = published_posts.filter(tags__in=[tag])
-
-    paginator = Paginator(published_posts, posts_on_page)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        # If the page number passed in the request is greater than the number
-        # of existing page numbers.
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'blog/post/list.html',
-                  {'page': page, 'posts': posts, 'tag': tag})
-
-
-def post_detail(request, year, month, day, post):
+def post_detail(request, year, month, day, post, similar_posts_number=4):
     """Displays a Post page with comments and a list of similar Posts.
 
     Args:
-        request: A HttpRequest instance.
+        request: An HttpRequest instance.
         year: Integer year of Post Published.
         month: Integer month of Post Published.
         day: Integer day of Post Published.
         post: String Post slug.
+        similar_post_number: An integer number of similar posts on a page.
 
     Returns:
-         A HttpResponse.
+         An HttpResponse.
     """
+
     post = get_object_or_404(Post, slug=post, status='published',
                              publish__year=year, publish__month=month,
                              publish__day=day)
@@ -81,7 +52,7 @@ def post_detail(request, year, month, day, post):
     # TODO(mk-dv): Get rid of the magic number.
     similar_posts = (other_posts_with_same_tags
                      .annotate(same_tags=Count('tags'))
-                     .order_by('-same_tags', '-publish'))[:4]
+                     .order_by('-same_tags', '-publish'))[:similar_posts_number]
     return render(request, 'blog/post/detail.html',
                   {'post': post,
                    'comments': comments,
@@ -90,15 +61,70 @@ def post_detail(request, year, month, day, post):
                    'similar_posts': similar_posts})
 
 
+def post_list(request, tag_slug=None, posts_on_page = 3):
+    """Displays the main blog page with paginated Post's.
+
+    Args:
+        request: An HttpRequest instance.
+        posts_on_page: An integer post number on one page.
+        tag_slug: Tag for Post filtering.
+
+    Returns:
+         An HttpResponse.
+    """
+    published_posts = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        published_posts = published_posts.filter(tags__in=[tag])
+
+    paginator = Paginator(published_posts, posts_on_page)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If the page number passed in the request is greater than the number
+        # of existing page numbers.
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'blog/post/list.html',
+                  {'page': page, 'posts': posts, 'tag': tag})
+
+
+# TODO(mk-dv): Check what happens if, for example, the 'request' is sent using
+#  the POST method.
+def post_search(request):
+    """
+
+    Args:
+        request: An HttpRequest instance passed with the POST method.
+
+    """
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        # TODO(mk-dv): Try this request in the console.
+        results = (Post.objects
+                   .annotate(search=SearchVector('title', 'body'))
+                   .filter(search=query))
+    return render(request, 'blog/post/search.html',
+                  {'form': form, 'query': query, 'results': results})
+
+
 def post_share_by_email(request, post_id):
     """Displays a share Post by email page.
 
     Args:
-        request: A HttpRequest instance.
+        request: An HttpRequest instance.
         post_id: An integer Post primary key.
 
     Returns:
-         A HttpResponse.
+         An HttpResponse.
     """
     # Get a Post object by id. In theory get_object_or_404 uses Django ORM
     # (objects.get), they are equivalent anyway.
