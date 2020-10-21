@@ -35,6 +35,18 @@
         </li>
       {% endfor %}
     </ul>
+    <h3>Search for posts</h3>
+    <form action="{% url "blog:post_search" %}" method="get">
+      {% if form %}
+        {{ form.as_p }}
+      {% else %}
+        {% post_search_form %}
+{#        {% post_search_form as form %}#}
+{#          {{ form.as_p }}#}
+{#        {% endwith %}#}
+      {% endif %}
+      <input  type="submit" value="Search">
+    </form>
   </div>
 </body>
 </html>

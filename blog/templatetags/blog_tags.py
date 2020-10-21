@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 
 import markdown
 
+from blog.forms import SearchForm
 from blog.models import Post
 
 register = template.Library()
@@ -34,3 +35,8 @@ def show_latest_posts(count=5):
 @register.simple_tag
 def total_posts():
     return Post.published.count()
+
+
+@register.simple_tag
+def post_search_form():
+    return SearchForm()
