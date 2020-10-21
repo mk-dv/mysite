@@ -8,9 +8,8 @@ from django.utils import timezone
 from taggit.managers import TaggableManager
 
 
-# Create a custom Model Manager
 class PublishedManager(models.Manager):
-    """A custom Model Manager for Post"""
+    """A custom Model Manager for Post."""
 
     def get_queryset(self):
         return super().get_queryset().filter(status='published')
