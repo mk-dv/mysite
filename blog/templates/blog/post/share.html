@@ -3,25 +3,24 @@
 {% block title %}Share a post{% endblock %}
 
 {% block content %}
-    {% if sent %}
-        <h1>E-mail successfully sent</h1>
-        <p>
-            "{{ post.title }}" was successfully sent to
-            {{ form.cleaned_data.to }}
-        </p>
-    {% elif sent_failed %}
-            <h1>Service unavailable.</h1>
-        <p>
-            "{{ post.title }}" was not sent to {{ form.cleaned_data.to }}.
-        </p>
-    {% else %}
-        <h1>Share "{{ post.title }}" by e-mail</h1>
-        {# action = ".": sets the current URL of the form. #}
-        <form action="." method="post">
-            {# Add form object with fields in <p> tags. #}
-            {{ form.as_p }}
-            {% csrf_token %}
-            <input type="submit" value="Send e-mail">
-        </form>
-    {% endif %}
+  {% if sent %}
+    <h1>E-mail successfully sent</h1>
+    <p>
+      "{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}
+    </p>
+  {% elif sent_failed %}
+    <h1>Service unavailable.</h1>
+    <p>
+      "{{ post.title }}" was not sent to {{ form.cleaned_data.to }}.
+    </p>
+  {% else %}
+    <h1>Share "{{ post.title }}" by e-mail</h1>
+    {# action = ".": sets the current URL of the form. #}
+    <form action="." method="post">
+      {# Add form object with fields in <p> tags. #}
+      {{ form.as_p }}
+      {% csrf_token %}
+      <input type="submit" value="Send e-mail">
+    </form>
+  {% endif %}
 {% endblock %}
