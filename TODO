@@ -1,1 +1,12 @@
-TODO(mk-dv):заменить имя домена в admin/sites/site
+TODO(mk-dv): Change domain name in '../admin/sites/site'
+TODO(mk-dv): Reformat the docstring with a clear type indication. New format:
+               attribute(type): Description.
+TODO(mk-dv): Add a line break to the end of docstrings, indented at the end.
+TODO(mk-dv): Check f-stings.
+TODO(mk-dv): Sort imports.
+многострочные импорты
+sort Models attrs
+choices style
+print(
+    'if_this_strings'
+)

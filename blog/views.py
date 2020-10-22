@@ -43,17 +43,17 @@ def post_detail(request, year, month, day, post, similar_posts_number=4):
             new_comment.post = post
             new_comment.save()
         else:
-            # If the form is valid, then return the form with the data.
             comment_form = CommentForm()
 
     # Forming a similar posts list.
     post_tags_ids = post.tags.values_list('id', flat=True)
-    all_posts_with_same_tags = Post.published.filter(tags__in=post_tags_ids)
-    other_posts_with_same_tags = all_posts_with_same_tags.exclude(id=post.id)
-    # TODO(mk-dv): Get rid of the magic number.
-    similar_posts = (other_posts_with_same_tags
+
+    similar_posts = (Post.published.filter(tags__in=post_tags_ids)
+                     .exclude(id=post.id)
                      .annotate(same_tags=Count('tags'))
-                     .order_by('-same_tags', '-publish'))[:similar_posts_number]
+                     .order_by('-same_tags', '-publish')
+                     )[:similar_posts_number]
+
     return render(request, 'blog/post/detail.html',
                   {'post': post,
                    'comments': comments,
@@ -97,7 +97,7 @@ def post_search(request):
     """Search posts by a query in title or body.
 
     Args:
-        request: An HttpRequest instance with search query passed with the POST
+        request: An HttpRequest instance with search query passed with the GET
          method.
     """
     form = SearchForm()
@@ -107,7 +107,6 @@ def post_search(request):
         form = SearchForm(request.GET)
     if form.is_valid():
         query = form.cleaned_data['query']
-        # TODO(mk-dv): Check variable name for relevance.
         THRESHOLD = 0.003
         # Annotate table strings by SearchVectors and filter by relevance. Using
         # SearchRank for comment ranking.
@@ -120,7 +119,7 @@ def post_search(request):
                     )
                    .filter(similarity__gte=THRESHOLD)
                    .order_by('-similarity'))
-    return render(request, 'blog/post/search.html',
+    return render(request, 'blog/post/search_results.html',
                   {'form': form, 'query': query, 'results': results})
 
 
@@ -159,7 +158,7 @@ def post_share_by_email(request, post_id):
 
             from_email = 'django.framework.email.test@gmail.com'
             try:
-                send_mail(subject, message, from_email, [cd['to']])
+                send_mail(subject, message, from_email, [cd['destination']])
                 sent = True
             except Exception:
                 sent_failed = True

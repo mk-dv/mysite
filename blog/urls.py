@@ -1,11 +1,23 @@
-"""Application routes.
+"""blog application URL Configuration
 
 Attributes:
-    appname (int): Define an application namespace for grouping URLs and using
+    appname (str): Define an application namespace for grouping URLs and using
         their names to access them. For example - access to app templates using
         namespaces. Details:
-        https://docs.djangoproject.com/en/2.0/topics/http/urls/#url-namespaces
-    urlpatterns (list): List of application routes.
+        docs.djangoproject.com/en/2.2/topics/http/urls/#url-namespaces
+    urlpatterns (list): List of application routes. For more information please
+        see: docs.djangoproject.com/en/2.2/topics/http/urls/
+
+Examples:
+    Function views
+        1. Add an import:  from my_app import views
+        2. Add a URL to urlpatterns:  path('', views.home, name='home')
+    Class-based views
+        1. Add an import:  from other_app.views import Home
+        2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    Including another URLconf
+        1. Import the include() function: from django.urls import include, path
+        2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
 

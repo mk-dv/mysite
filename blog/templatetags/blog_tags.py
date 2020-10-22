@@ -1,10 +1,16 @@
+# TODO(mk-dv): Add a module docstring.
 """Custom temlate tags.
+
+Attributes:
+    register():
+        # Including tags must only return a dict type for use in the context of the
+    # template.
 """
+import markdown
+
 from django import template
 from django.db.models import Count
 from django.utils.safestring import mark_safe
-
-import markdown
 
 from blog.forms import SearchForm
 from blog.models import Post
@@ -24,8 +30,6 @@ def markdown_format(text):
     return mark_safe(markdown.markdown(text))
 
 
-# Including tags must only return a dict type for use in the context of the
-# template.
 @register.inclusion_tag('blog/post/latest_posts.html')
 def show_latest_posts(count=5):
     latest_posts = Post.published.order_by('-publish')[:count]

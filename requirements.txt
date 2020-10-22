@@ -1,4 +1,4 @@
-# TODO(mk-dv): remove django-extensions, ipython, jupyter
+# TODO(mk-dv): Remove django-extensions, ipython, jupyter.
 Django~=2.2
 django-extensions
 jupyter
