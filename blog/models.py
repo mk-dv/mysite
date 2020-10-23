@@ -1,4 +1,4 @@
-"""'blog' application models."""
+"""blog application models."""
 from taggit.managers import TaggableManager
 
 from django.contrib.auth.models import User
@@ -18,21 +18,35 @@ class Post(models.Model):
     """Post model.
 
     Attributes:
-        DRAFT(str): Constant used in 'STATUS_CHOICES'.
-        PUBLISHED(str): Constant used in 'STATUS_CHOICES'.
-        STATUS_CHOICES(Tuple): Choices for 'status'.
-        title(CharField): Post title.
-        slug(SlugField): Post slug. Can contain characters, numbers, hyphens,
-            and underscores.
-        author(ForeignKey): Post author.
-        body(TextField): Post body.
-        publish(DateTimeField): Post publish.
-        created(DateTimeField): Post created.
-        updated(DateTimeField): Post updated.
-        status(CharField): Post status.
-        objects(Manager): Default Django object-relation manager.
-        published(PublishedManager): Custom object-relation manager.
-        tags(TaggableManager): Post tags manager.
+        DRAFT (str):
+            Constant used in STATUS_CHOICES.
+        PUBLISHED (str):
+            Constant used in STATUS_CHOICES.
+        STATUS_CHOICES (tuple):
+            Choices for 'status'.
+        title (CharField):
+            Post title.
+        slug (SlugField):
+            Post slug. Can contain characters, numbers, hyphens, and
+            underscores.
+        author (ForeignKey):
+            Post author.
+        body (TextField):
+            Post body.
+        publish (DateTimeField):
+            Post publish.
+        created (DateTimeField):
+            Post created.
+        updated (DateTimeField):
+            Post updated.
+        status (CharField):
+            Post status.
+        objects (Manager):
+            Default Django object-relation manager.
+        published (PublishedManager):
+            Custom object-relation manager.
+        tags (TaggableManager):
+            Post tags manager.
     """
     DRAFT = 'DRAFT'
     PUBLISHED = 'PUBLISHED'
@@ -71,14 +85,20 @@ class Comment(models.Model):
     """A user comment model for a post.
 
     Attributes:
-        post(ForeignKey): The post to which the comment belongs.
-        name(CharField): Commenter name.
-        email(TextField): Commenter email.
-        body(TextField):  Comment body.
-        created(DateTimeField): The time the comment were created.
-        active(BooleanField): Comment display state. 'True' - show the comment.
+        post (ForeignKey):
+            The post to which the comment belongs.
+        name (CharField):
+            Commenter name.
+        email (TextField):
+            Commenter email.
+        body (TextField):
+            Comment body.
+        created (DateTimeField):
+            The time the comment were created.
+        active (BooleanField):
+            Comment display state. True - show the comment.
     """
-    # A 'related_name' allows access to article comments ('post.comments.all()')
+    # A related_name allows access to article comments ('post.comments.all()')
     # , in addition to accessing the article from a comment ('comment.post').
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
                              related_name='comments')

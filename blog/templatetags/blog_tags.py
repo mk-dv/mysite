@@ -1,10 +1,10 @@
-# TODO(mk-dv): Add a module docstring.
-"""Custom temlate tags.
+"""Custom template tags.
 
 Attributes:
-    register():
-        # Including tags must only return a dict type for use in the context of the
-    # template.
+    register (template.Library):
+        To be a valid tag library, the module must contain a module-level
+        variable named 'register' that is a template.Library instance, in which
+        all the tags and filters are registered.
 """
 import markdown
 
@@ -33,6 +33,8 @@ def markdown_format(text):
 @register.inclusion_tag('blog/post/latest_posts.html')
 def show_latest_posts(count=5):
     latest_posts = Post.published.order_by('-publish')[:count]
+    # Including tags must only return a dict type for use in the context of the
+    # template.
     return {'latest_posts': latest_posts}
 
 

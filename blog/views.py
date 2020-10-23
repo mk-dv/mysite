@@ -1,11 +1,11 @@
+from taggit.models import Tag
+
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.db.models import Count
 from django.db.models.functions import Greatest
 from django.shortcuts import get_object_or_404, render
-
-from taggit.models import Tag
 
 from .forms import CommentForm, EmailPostForm, SearchForm
 from .models import Post
@@ -15,12 +15,18 @@ def post_detail(request, year, month, day, post, similar_posts_number=4):
     """Displays a Post page with comments and a list of similar Posts.
 
     Args:
-        request: An HttpRequest instance.
-        year: Integer year of Post Published.
-        month: Integer month of Post Published.
-        day: Integer day of Post Published.
-        post: String Post slug.
-        similar_post_number: An integer number of similar posts on a page.
+        request (HttpRequest):
+
+        year (int):
+            Year of Post Published.
+        month (int):
+            Month of Post Published.
+        day (int):
+            Day of Post Published.
+        post (str):
+            Post slug.
+        similar_post_number (int):
+            Number of similar posts on a page.
 
     Returns:
          An HttpResponse.
@@ -66,9 +72,12 @@ def post_list(request, tag_slug=None, posts_on_page = 3):
     """Displays the main blog page with paginated Post's.
 
     Args:
-        request: An HttpRequest instance.
-        posts_on_page: An integer post number on one page.
-        tag_slug: Tag for Post filtering.
+        request (HttpRequest):
+
+        posts_on_page (int):
+            Post number on one page.
+        tag_slug (str):
+            Tag for Post filtering.
 
     Returns:
          An HttpResponse.
@@ -97,8 +106,10 @@ def post_search(request):
     """Search posts by a query in title or body.
 
     Args:
-        request: An HttpRequest instance with search query passed with the GET
-         method.
+        request (HttpRequest):
+            Request with search query passed with the GET method.
+    Returns:
+         An HttpResponse with search results.
     """
     form = SearchForm()
     query = None
@@ -127,11 +138,13 @@ def post_share_by_email(request, post_id):
     """Displays a share Post by email page.
 
     Args:
-        request: An HttpRequest instance.
-        post_id: An integer Post primary key.
+        request (HttpRequest):
+
+        post_id (int):
+            The primary key of the post.
 
     Returns:
-         An HttpResponse.
+         HttpResponse with a page about the status of the email sending.
     """
     # Get a Post object by id. In theory get_object_or_404 uses Django ORM
     # (objects.get), they are equivalent anyway.

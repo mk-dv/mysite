@@ -10,14 +10,18 @@ class LatestPostsFeed(Feed):
     represented by RSS elements (XML tags) with corresponding names.
 
     Attributes:
-        DESCRIPTION_LONG(int): The number of the first words of the
-            description.
-        POSTS_COUNT(int): The number of posts in the feed.
-        title(str): Feed title.
-        link(str): A relative link from root to feed.
-        description(str): Feed description.
+        DESCRIPTION_LEN (int):
+            The number of the first words of the description.
+        POSTS_COUNT (int):
+            The number of posts in the feed.
+        title (str):
+            Feed title.
+        link (str):
+            A relative link from root to feed.
+        description (str):
+            Feed description.
     """
-    DESCRIPTION_LONG = 30
+    DESCRIPTION_LEN = 30
     POSTS_COUNT = 5
     title = 'My blog'
     link = '/blog/'
@@ -38,4 +42,4 @@ class LatestPostsFeed(Feed):
 
     def item_description(self, item):
         """Get the description for each object returned by items()."""
-        return truncatewords(item.body, DESCRIPTION_LONG)
+        return truncatewords(item.body, DESCRIPTION_LEN)

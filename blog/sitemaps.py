@@ -6,8 +6,10 @@ class PostSitemap(Sitemap):
     """Add a sitemap.xml for search engine bots.
 
     Attributes:
-        changefreq: A string update frequency.
-        priority: A float priority.
+        changefreq (str):
+            Update frequency.
+        priority (float):
+            Priority.
     """
     changefreq = 'weekly'
     priority = 0.9

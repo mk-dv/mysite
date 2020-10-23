@@ -1,12 +1,14 @@
 """blog application URL Configuration
 
 Attributes:
-    appname (str): Define an application namespace for grouping URLs and using
-        their names to access them. For example - access to app templates using
-        namespaces. Details:
+    appname (str):
+        Define an application namespace for grouping URLs and using their names
+        to access them. For example - access to app templates using namespaces.
+        Details:
         docs.djangoproject.com/en/2.2/topics/http/urls/#url-namespaces
-    urlpatterns (list): List of application routes. For more information please
-        see: docs.djangoproject.com/en/2.2/topics/http/urls/
+    urlpatterns (list):
+        List of application routes. For more information please see:
+        docs.djangoproject.com/en/2.2/topics/http/urls/
 
 Examples:
     Function views
