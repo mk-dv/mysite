@@ -1,8 +1,4 @@
-# TODO(mk-dv): Remove django-extensions, ipython, jupyter.
 Django~=2.2
-django-extensions
-jupyter
-ipython
 django_taggit~=0.22
 Markdown==2.6.11
 psycopg2
