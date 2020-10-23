@@ -27,14 +27,13 @@ class LatestPostsFeed(Feed):
     link = '/blog/'
     description = 'New posts of my blog.'
 
-    @staticmethod
-    def items():
+    def items(self):
         """Get objects to be included in the RSS feed.
 
         Returns:
             A 'QuerySet' with 5 published posts.
         """
-        return Post.published.all()[:POSTS_COUNT]
+        return Post.published.all()[:self.POSTS_COUNT]
 
     def item_title(self, item):
         """Get the title for each object returned by items()."""
@@ -42,4 +41,4 @@ class LatestPostsFeed(Feed):
 
     def item_description(self, item):
         """Get the description for each object returned by items()."""
-        return truncatewords(item.body, DESCRIPTION_LEN)
+        return truncatewords(item.body, self.DESCRIPTION_LEN)

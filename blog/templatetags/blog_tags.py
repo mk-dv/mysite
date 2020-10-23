@@ -21,6 +21,7 @@ register = template.Library()
 @register.simple_tag
 def get_most_commented_posts(count=5):
     return (Post.published
+                .filter(comments__gt=0)
                 .annotate(total_comments=Count('comments'))
                 .order_by('-total_comments')[:count])
 

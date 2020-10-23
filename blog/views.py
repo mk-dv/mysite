@@ -32,7 +32,7 @@ def post_detail(request, year, month, day, post, similar_posts_number=4):
          An HttpResponse.
     """
 
-    post = get_object_or_404(Post, slug=post, status='published',
+    post = get_object_or_404(Post, slug=post, status='PUBLISHED',
                              publish__year=year, publish__month=month,
                              publish__day=day)
 
