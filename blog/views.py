@@ -25,7 +25,7 @@ def post_detail(request, year, month, day, post, similar_posts_number=4):
             Day of Post Published.
         post (str):
             Post slug.
-        similar_post_number (int):
+        similar_posts_number (int):
             Number of similar posts on a page.
 
     Returns:
@@ -68,7 +68,7 @@ def post_detail(request, year, month, day, post, similar_posts_number=4):
                    'similar_posts': similar_posts})
 
 
-def post_list(request, tag_slug=None, posts_on_page = 3):
+def post_list(request, tag_slug=None, posts_on_page=3):
     """Displays the main blog page with paginated Post's.
 
     Args:
@@ -118,7 +118,7 @@ def post_search(request):
         form = SearchForm(request.GET)
     if form.is_valid():
         query = form.cleaned_data['query']
-        THRESHOLD = 0.003
+        threshold = 0.003
         # Annotate table strings by SearchVectors and filter by relevance. Using
         # SearchRank for comment ranking.
         results = (Post.objects
@@ -128,7 +128,7 @@ def post_search(request):
                             TrigramSimilarity('body', query)
                         )
                     )
-                   .filter(similarity__gte=THRESHOLD)
+                   .filter(similarity__gte=threshold)
                    .order_by('-similarity'))
     return render(request, 'blog/post/search_results.html',
                   {'form': form, 'query': query, 'results': results})
@@ -148,7 +148,7 @@ def post_share_by_email(request, post_id):
     """
     # Get a Post object by id. In theory get_object_or_404 uses Django ORM
     # (objects.get), they are equivalent anyway.
-    post = get_object_or_404(Post, id=post_id, status='published')
+    post = get_object_or_404(Post, id=post_id, status='PUBLISHED')
     sent = False
     sent_failed = False
     if request.method == 'POST':

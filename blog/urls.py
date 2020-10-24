@@ -1,7 +1,7 @@
 """blog application URL Configuration
 
 Attributes:
-    appname (str):
+    app_name (str):
         Define an application namespace for grouping URLs and using their names
         to access them. For example - access to app templates using namespaces.
         Details:

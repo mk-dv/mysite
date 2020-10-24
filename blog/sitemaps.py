@@ -17,6 +17,7 @@ class PostSitemap(Sitemap):
     def items(self):
         return Post.published.all()
 
-    def lastmod(self, obj):
+    @staticmethod
+    def lastmod(obj):
         """Returns the last update time for each item."""
         return obj.updated

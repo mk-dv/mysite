@@ -100,8 +100,6 @@ class Comment(models.Model):
     """
     # A related_name allows access to article comments ('post.comments.all()')
     # , in addition to accessing the article from a comment ('comment.post').
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             related_name='comments')
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE,
         related_name='comments'
