@@ -2,3 +2,4 @@ Django~=2.2
 django_taggit~=0.22
 Markdown==2.6.11
 psycopg2
+python-dotenv
