@@ -36,10 +36,10 @@ class PostAdmin(admin.ModelAdmin):
             Adds a panel to the right to filter by the specified field names
             (only fields with different values are used).
         prepopulated_fields (dict[str, tuple]):
-            When adding a record (in the admin panel) - the slug takes the value
-            from the header field. The field is filled in immediately when
-            filling in the header field when creating a post (with a delay),
-            while transliteration is used for the slug.
+            When adding a record (in the admin panel) - the slug takes the
+            value from the header field. The field is filled in immediately
+            when filling in the header field when creating a post (with a
+            delay), while transliteration is used for the slug.
         raw_id_fields (tuple[str]):
             Replaces a specified field widget with a search box with raw data.
         search_fields (tuple[str]):

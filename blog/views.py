@@ -119,8 +119,8 @@ def post_search(request):
     if form.is_valid():
         query = form.cleaned_data['query']
         threshold = 0.003
-        # Annotate table strings by SearchVectors and filter by relevance. Using
-        # SearchRank for comment ranking.
+        # Annotate table strings by SearchVectors and filter by relevance.
+        # Using SearchRank for comment ranking.
         results = (Post.objects
                    .annotate(
                         similarity=Greatest(
@@ -160,7 +160,7 @@ def post_share_by_email(request, post_id):
             cd = form.cleaned_data
 
             # Sending email.
-            # get_absolute_url() returns the path relative from the application.
+            # get_absolute_url() returns the path relative from the application
             post_url = request.build_absolute_uri(post.get_absolute_url())
 
             subject = (f"{cd['name']} ({cd['email']}) recommends you reading "
