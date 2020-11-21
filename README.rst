@@ -6,4 +6,4 @@
 
 Description
 ^^^^^^^^^^^
-This is a simple example of blog writen on Django 2.2.
+This is a simple example of a blog written on Django 2.2.
